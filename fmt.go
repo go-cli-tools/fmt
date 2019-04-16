@@ -5,11 +5,19 @@ import (
 	"io"
 )
 
-var f Format
+func new() *Format {
+	return &Format{
+		style:  DefaultStyle,
+		colour: DefaultColour,
+	}
+}
 
 func WithStyle(style Style) *Format {
-	f.WithStyle(style)
-	return &f
+	return new().WithStyle(style)
+}
+
+func WithColour(colour Colour) *Format {
+	return new().WithColour(colour)
 }
 
 func Errorf(format string, a ...interface{}) error {
