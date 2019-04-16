@@ -1,4 +1,4 @@
-package format
+package colour
 
 type Colour uint8
 

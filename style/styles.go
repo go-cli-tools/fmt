@@ -1,4 +1,4 @@
-package format
+package style
 
 type Style uint8
 

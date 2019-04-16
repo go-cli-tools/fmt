@@ -2,22 +2,29 @@ package format
 
 import (
 	"fmt"
+	"github.com/go-cli-tools/format/colour"
+	"github.com/go-cli-tools/format/style"
 	"io"
 )
 
 func new() *Format {
 	return &Format{
-		style:  DefaultStyle,
-		colour: DefaultColour,
+		style:    style.DefaultStyle,
+		fgColour: colour.DefaultColour,
+		bgColour: colour.DefaultColour + colour.BackgroundOffset,
 	}
 }
 
-func WithStyle(style Style) *Format {
+func WithStyle(style style.Style) *Format {
 	return new().WithStyle(style)
 }
 
-func WithColour(colour Colour) *Format {
+func WithColour(colour colour.Colour) *Format {
 	return new().WithColour(colour)
+}
+
+func WithBackground(colour colour.Colour) *Format {
+	return new().WithBackground(colour)
 }
 
 func Errorf(format string, a ...interface{}) error {
