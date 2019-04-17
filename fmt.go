@@ -23,8 +23,24 @@ func WithColour(colour colour.Colour) *Format {
 	return new().WithColour(colour)
 }
 
+func WithColour256(colour int) *Format {
+	return new().WithColour256(colour)
+}
+
+func WithColourRgb(r, g, b int) *Format {
+	return new().WithColourRgb(r, g, b)
+}
+
 func WithBackground(colour colour.Colour) *Format {
 	return new().WithBackground(colour)
+}
+
+func WithBackground256(colour int) *Format {
+	return new().WithBackground256(colour)
+}
+
+func WithBackgroundRgb(r, g, b int) *Format {
+	return new().WithBackgroundRgb(r, g, b)
 }
 
 func Errorf(format string, a ...interface{}) error {

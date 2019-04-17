@@ -1,9 +1,16 @@
+// +build !windows
+
 package colour
 
 type Colour uint8
 
-const BackgroundOffset Colour = 10
-const DefaultColour Colour = 39
+const (
+	BackgroundOffset  Colour = 10
+	CustomColour      Colour = 38
+	TwoFiftySizColour Colour = 5
+	RgbColour         Colour = 2
+	DefaultColour     Colour = 39
+)
 
 const (
 	Black Colour = iota + 30

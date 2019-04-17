@@ -2,39 +2,67 @@ package format
 
 import (
 	"fmt"
-	"github.com/go-cli-tools/format/colour"
-	"github.com/go-cli-tools/format/style"
+	c "github.com/go-cli-tools/format/colour"
+	s "github.com/go-cli-tools/format/style"
 	"io"
 )
 
 type Format struct {
-	style    style.Style
-	fgColour colour.Colour
-	bgColour colour.Colour
+	style         s.Style
+	fgColour      c.Colour
+	bgColour      c.Colour
+	fgColour256   int
+	bgColour256   int
+	fgR, fgG, fgB int
+	bgR, bgG, bgB int
 }
 
 func (f *Format) ResetStyle() *Format {
-	f.style = style.DefaultStyle
+	f.style = s.DefaultStyle
 	return f
 }
 
 func (f *Format) ResetColour() *Format {
-	f.fgColour = colour.DefaultColour
+	f.fgColour = c.DefaultColour
 	return f
 }
 
-func (f *Format) WithStyle(style style.Style) *Format {
+func (f *Format) WithStyle(style s.Style) *Format {
 	f.style = style
 	return f
 }
 
-func (f *Format) WithColour(colour colour.Colour) *Format {
+func (f *Format) WithColour(colour c.Colour) *Format {
 	f.fgColour = colour
 	return f
 }
 
-func (f *Format) WithBackground(color colour.Colour) *Format {
-	f.bgColour = color + colour.BackgroundOffset
+func (f *Format) WithColour256(colour int) *Format {
+	f.fgColour = c.TwoFiftySizColour
+	f.fgColour256 = colour
+	return f
+}
+
+func (f *Format) WithColourRgb(red, green, blue int) *Format {
+	f.fgColour = c.RgbColour
+	f.fgR, f.fgG, f.fgB = red, green, blue
+	return f
+}
+
+func (f *Format) WithBackground(colour c.Colour) *Format {
+	f.bgColour = colour + c.BackgroundOffset
+	return f
+}
+
+func (f *Format) WithBackground256(colour int) *Format {
+	f.bgColour = c.TwoFiftySizColour
+	f.bgColour256 = colour
+	return f
+}
+
+func (f *Format) WithBackgroundRgb(red, green, blue int) *Format {
+	f.bgColour = c.RgbColour
+	f.bgR, f.bgG, f.bgB = red, green, blue
 	return f
 }
 
@@ -84,9 +112,27 @@ func (f *Format) Sprintln(a ...interface{}) string {
 }
 
 func (f *Format) code() string {
-	return fmt.Sprintf("%d;%d;%d", f.style, f.fgColour, f.bgColour)
+	var fgColourCode, bgColourCode string
+
+	if f.fgColour == c.TwoFiftySizColour {
+		fgColourCode = fmt.Sprintf("%d;%d;%d", c.CustomColour, f.fgColour, f.fgColour256)
+	} else if f.fgColour == c.RgbColour {
+		fgColourCode = fmt.Sprintf("%d;%d;%d;%d;%d", c.CustomColour, f.fgColour, f.fgR, f.fgG, f.fgB)
+	} else {
+		fgColourCode = fmt.Sprint(f.fgColour)
+	}
+
+	if f.bgColour == c.TwoFiftySizColour {
+		bgColourCode = fmt.Sprintf("%d;%d;%d", c.CustomColour+c.BackgroundOffset, f.bgColour, f.bgColour256)
+	} else if f.bgColour == c.RgbColour {
+		bgColourCode = fmt.Sprintf("%d;%d;%d;%d;%d", c.CustomColour+c.BackgroundOffset, f.bgColour, f.bgR, f.bgG, f.bgB)
+	} else {
+		bgColourCode = fmt.Sprint(f.bgColour)
+	}
+
+	return fmt.Sprintf("%d;%s;%s", f.style, fgColourCode, bgColourCode)
 }
 
 func (f *Format) endCode() string {
-	return fmt.Sprintf("%d", style.ResetAll)
+	return fmt.Sprintf("%d", s.ResetAll)
 }
