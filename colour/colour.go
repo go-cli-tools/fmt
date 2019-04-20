@@ -7,7 +7,7 @@ type Colour uint8
 const (
 	BackgroundOffset  Colour = 10
 	CustomColour      Colour = 38
-	TwoFiftySizColour Colour = 5
+	TwoFiftySixColour Colour = 5
 	RgbColour         Colour = 2
 	DefaultColour     Colour = 39
 )

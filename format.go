@@ -38,7 +38,6 @@ func (f *Format) WithColour(colour c.Colour) *Format {
 }
 
 func (f *Format) WithColour256(colour int) *Format {
-	f.fgColour = c.TwoFiftySizColour
 	f.fgColour256 = colour
 	return f
 }
@@ -50,12 +49,12 @@ func (f *Format) WithColourRgb(red, green, blue int) *Format {
 }
 
 func (f *Format) WithBackground(colour c.Colour) *Format {
-	f.bgColour = colour + c.BackgroundOffset
+	f.bgColour = colour
 	return f
 }
 
 func (f *Format) WithBackground256(colour int) *Format {
-	f.bgColour = c.TwoFiftySizColour
+	f.bgColour = c.TwoFiftySixColour
 	f.bgColour256 = colour
 	return f
 }
@@ -88,7 +87,12 @@ func (f *Format) Print(a ...interface{}) (n int, err error) {
 
 func (f *Format) Printf(format string, a ...interface{}) (n int, err error) {
 	line := fmt.Sprintf(format, a...)
-	return fmt.Print(fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
+	//return fmt.Print(fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
+	f.code()
+	aa, bb := fmt.Print(line)
+	f.endCode()
+
+	return aa, bb
 }
 
 func (f *Format) Println(a ...interface{}) (n int, err error) {
@@ -109,30 +113,4 @@ func (f *Format) Sprintf(format string, a ...interface{}) string {
 func (f *Format) Sprintln(a ...interface{}) string {
 	line := fmt.Sprint(a...)
 	return fmt.Sprintf("\033[%sm%v\033[%sm\n", f.code(), line, f.endCode())
-}
-
-func (f *Format) code() string {
-	var fgColourCode, bgColourCode string
-
-	if f.fgColour == c.TwoFiftySizColour {
-		fgColourCode = fmt.Sprintf("%d;%d;%d", c.CustomColour, f.fgColour, f.fgColour256)
-	} else if f.fgColour == c.RgbColour {
-		fgColourCode = fmt.Sprintf("%d;%d;%d;%d;%d", c.CustomColour, f.fgColour, f.fgR, f.fgG, f.fgB)
-	} else {
-		fgColourCode = fmt.Sprint(f.fgColour)
-	}
-
-	if f.bgColour == c.TwoFiftySizColour {
-		bgColourCode = fmt.Sprintf("%d;%d;%d", c.CustomColour+c.BackgroundOffset, f.bgColour, f.bgColour256)
-	} else if f.bgColour == c.RgbColour {
-		bgColourCode = fmt.Sprintf("%d;%d;%d;%d;%d", c.CustomColour+c.BackgroundOffset, f.bgColour, f.bgR, f.bgG, f.bgB)
-	} else {
-		bgColourCode = fmt.Sprint(f.bgColour)
-	}
-
-	return fmt.Sprintf("%d;%s;%s", f.style, fgColourCode, bgColourCode)
-}
-
-func (f *Format) endCode() string {
-	return fmt.Sprintf("%d", s.ResetAll)
 }
