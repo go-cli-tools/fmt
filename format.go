@@ -38,6 +38,7 @@ func (f *Format) WithColour(colour c.Colour) *Format {
 }
 
 func (f *Format) WithColour256(colour int) *Format {
+	f.fgColour = c.TwoFiftySixColour
 	f.fgColour256 = colour
 	return f
 }
@@ -67,50 +68,45 @@ func (f *Format) WithBackgroundRgb(red, green, blue int) *Format {
 
 func (f *Format) Fprint(w io.Writer, a ...interface{}) (n int, err error) {
 	line := fmt.Sprint(a...)
-	return fmt.Fprint(w, fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
+	return fmt.Fprint(w, fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
 	line := fmt.Sprintf(format, a...)
-	return fmt.Fprint(w, fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
+	return fmt.Fprint(w, fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
 	line := fmt.Sprint(a...)
-	return fmt.Fprint(w, fmt.Sprintf("\033[%sm%v\033[%sm\n", f.code(), line, f.endCode()))
+	return fmt.Fprint(w, fmt.Sprintf("%s%v%s\n", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Print(a ...interface{}) (n int, err error) {
 	line := fmt.Sprint(a...)
-	return fmt.Print(fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
+	return fmt.Print(fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Printf(format string, a ...interface{}) (n int, err error) {
 	line := fmt.Sprintf(format, a...)
-	//return fmt.Print(fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode()))
-	f.code()
-	aa, bb := fmt.Print(line)
-	f.endCode()
-
-	return aa, bb
+	return fmt.Print(fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Println(a ...interface{}) (n int, err error) {
 	line := fmt.Sprint(a...)
-	return fmt.Printf(fmt.Sprintf("\033[%sm%v\033[%sm\n", f.code(), line, f.endCode()))
+	return fmt.Printf(fmt.Sprintf("%s%v%s\n", f.code(), line, f.endCode()))
 }
 
 func (f *Format) Sprint(a ...interface{}) string {
 	line := fmt.Sprint(a...)
-	return fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode())
+	return fmt.Sprintf("%s%v%s", f.code(), line, f.endCode())
 }
 
 func (f *Format) Sprintf(format string, a ...interface{}) string {
 	line := fmt.Sprintf(format, a...)
-	return fmt.Sprintf("\033[%sm%v\033[%sm", f.code(), line, f.endCode())
+	return fmt.Sprintf("%s%v%s", f.code(), line, f.endCode())
 }
 
 func (f *Format) Sprintln(a ...interface{}) string {
 	line := fmt.Sprint(a...)
-	return fmt.Sprintf("\033[%sm%v\033[%sm\n", f.code(), line, f.endCode())
+	return fmt.Sprintf("%s%v%s\n", f.code(), line, f.endCode())
 }

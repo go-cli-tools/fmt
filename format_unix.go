@@ -27,9 +27,9 @@ func (f *Format) code() string {
 		bgColourCode = fmt.Sprint(f.bgColour + c.BackgroundOffset)
 	}
 
-	return fmt.Sprintf("%d;%s;%s", f.style, fgColourCode, bgColourCode)
+	return fmt.Sprintf("\033[%d;%s;%sm", f.style, fgColourCode, bgColourCode)
 }
 
 func (f *Format) endCode() string {
-	return fmt.Sprintf("%d", s.ResetAll)
+	return fmt.Sprintf("\033[%dm", s.ResetAll)
 }
