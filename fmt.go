@@ -7,14 +7,6 @@ import (
 	"io"
 )
 
-func new() *Format {
-	return &Format{
-		style:    style.DefaultStyle,
-		fgColour: colour.DefaultColour,
-		bgColour: colour.DefaultColour + colour.BackgroundOffset,
-	}
-}
-
 func WithStyle(style style.Style) *Format {
 	return new().WithStyle(style)
 }

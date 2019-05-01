@@ -88,7 +88,11 @@ func (f *Format) Print(a ...interface{}) (n int, err error) {
 
 func (f *Format) Printf(format string, a ...interface{}) (n int, err error) {
 	line := fmt.Sprintf(format, a...)
-	return fmt.Print(fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
+	//return fmt.Print(fmt.Sprintf("%s%v%s", f.code(), line, f.endCode()))
+	f.code()
+	aa, bb := fmt.Print(line)
+	f.endCode()
+	return aa, bb
 }
 
 func (f *Format) Println(a ...interface{}) (n int, err error) {

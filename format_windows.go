@@ -8,10 +8,8 @@ import (
 )
 
 func (f *Format) code() string {
-	var bgColour uint16
-	bgColour
 
-	_, _ = c.SetConsoleTextAttr(uintptr(syscall.Stdout), uint16(f.fgColour|f.bgColour))
+	_, _ = c.SetConsoleTextAttr(uintptr(syscall.Stdout), uint16(f.fgColour|c.BackgroundOffset*f.bgColour))
 
 	return ""
 }
@@ -19,10 +17,10 @@ func (f *Format) code() string {
 func (f *Format) endCode() string {
 	var dc c.Colour
 
-	if c.DefScreenInfo.Attributes == uint16(c.DefaultColour) {
+	if c.DefScreenInfo.Attributes != 86 {
 		dc = c.DefaultColour
 	} else {
-		dc = c.Colour(c.DefScreenInfo.Attributes)
+		dc = c.DefaultColourPS
 	}
 	_, _ = c.SetConsoleTextAttr(uintptr(syscall.Stdout), uint16(dc))
 

@@ -4,6 +4,7 @@ import (
 	fmt "github.com/go-cli-tools/format"
 	"github.com/go-cli-tools/format/colour"
 	"github.com/go-cli-tools/format/style"
+	"runtime"
 )
 
 func main() {
@@ -63,37 +64,39 @@ func main() {
 	_, _ = fmt.Println("")
 	_, _ = fmt.Println("")
 
-	_, _ = fmt.Println("256 COLOURS MODE - FOREGROUND")
-	for i := 0; i < 256; i++ {
-		if i%16 == 0 {
-			_, _ = fmt.Println("")
+	if runtime.GOOS != "windows" {
+		_, _ = fmt.Println("256 COLOURS MODE - FOREGROUND")
+		for i := 0; i < 256; i++ {
+			if i%16 == 0 {
+				_, _ = fmt.Println("")
+			}
+			_, _ = fmt.WithColour256(i).Printf("  %-4d", i)
 		}
-		_, _ = fmt.WithColour256(i).Printf("  %-4d", i)
-	}
-	_, _ = fmt.Println("")
-	_, _ = fmt.Println("")
+		_, _ = fmt.Println("")
+		_, _ = fmt.Println("")
 
-	_, _ = fmt.Println("256 COLOURS MODE - BACKGROUND")
-	for i := 0; i < 256; i++ {
-		if i%16 == 0 {
-			_, _ = fmt.Println("")
-		}
-		if i < 9 {
-			_, _ = fmt.WithBackground256(i).Printf("  %-4d", i)
-		} else if i < 99 {
-			if i == 15 || (i >= 46 && i <= 51) || (i >= 82 && i <= 87) {
-				_, _ = fmt.WithBackground256(i).WithColour(colour.Black).Printf("  %-4d", i)
-			} else {
-				_, _ = fmt.WithBackground256(i).Printf("  %-4d", i)
+		_, _ = fmt.Println("256 COLOURS MODE - BACKGROUND")
+		for i := 0; i < 256; i++ {
+			if i%16 == 0 {
+				_, _ = fmt.Println("")
 			}
-		} else {
-			if (i >= 118 && i <= 123) || (i >= 154 && i <= 159) || (i >= 190 && i <= 195) || (i >= 224 && i <= 231) || i >= 240 {
-				_, _ = fmt.WithBackground256(i).WithColour(colour.Black).Printf("  %-4d", i)
-			} else {
+			if i < 9 {
 				_, _ = fmt.WithBackground256(i).Printf("  %-4d", i)
+			} else if i < 99 {
+				if i == 15 || (i >= 46 && i <= 51) || (i >= 82 && i <= 87) {
+					_, _ = fmt.WithBackground256(i).WithColour(colour.Black).Printf("  %-4d", i)
+				} else {
+					_, _ = fmt.WithBackground256(i).Printf("  %-4d", i)
+				}
+			} else {
+				if (i >= 118 && i <= 123) || (i >= 154 && i <= 159) || (i >= 190 && i <= 195) || (i >= 224 && i <= 231) || i >= 240 {
+					_, _ = fmt.WithBackground256(i).WithColour(colour.Black).Printf("  %-4d", i)
+				} else {
+					_, _ = fmt.WithBackground256(i).Printf("  %-4d", i)
+				}
 			}
 		}
+		_, _ = fmt.Println("")
+		_, _ = fmt.Println("")
 	}
-	_, _ = fmt.Println("")
-	_, _ = fmt.Println("")
 }

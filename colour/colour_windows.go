@@ -30,7 +30,8 @@ const (
 
 const (
 	BackgroundOffset  Colour = 16
-	DefaultColour            = Black | White
+	DefaultColour            = Black*BackgroundOffset | White
+	DefaultColourPS          = Magenta*BackgroundOffset | White
 	WinFgIntensity    Colour = 0x0008
 	WinBgIntensity    Colour = 0x0080
 	WinOpLeading      Colour = 0x0100
